@@ -81,7 +81,7 @@ Simulated Events → Raw Data → Python ETL Pipeline → Processed Data → Str
 
 ### Analytics & Revenue Monitoring
 
-![Analytics Charts](assets/screenshots/analytics_charts.png)
+![Analytics Charts](assets/screenshots/analytics_dashboard.png)
 
 ---
 
