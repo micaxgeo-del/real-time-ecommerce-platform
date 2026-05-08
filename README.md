@@ -71,7 +71,23 @@ Simulated Events → Raw Data → Python ETL Pipeline → Processed Data → Str
 ---
 
 ## Dashboard Features
+## Dashboard Preview
 
+### Executive KPI Dashboard
+
+![KPI Dashboard](assets/screenshots/kpis_dashboard.png)
+
+---
+
+### Analytics & Revenue Monitoring
+
+![Analytics Charts](assets/screenshots/analytics_charts.png)
+
+---
+
+### Data Engineering & Operational Layer
+
+![Data Engineering Layer](assets/screenshots/data_engineering_layer.png)
 - Executive KPI cards
 - Revenue trend analysis
 - Active users monitoring
