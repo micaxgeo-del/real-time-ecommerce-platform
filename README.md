@@ -82,11 +82,7 @@ Simulated Events → Raw Data → Python ETL Pipeline → Processed Data → Str
 ![KPI Dashboard](assets/screenshots/kpis_dashboard.png)
 
 ---
-## Live Dashboard Demo
 
-![Dashboard Demo](assets/gifs/dashboard_demo.gif)
-
----
 ### Analytics & Revenue Monitoring
 
 ![Analytics Dashboard](assets/screenshots/analytics_dashboard.png)
@@ -96,6 +92,11 @@ Simulated Events → Raw Data → Python ETL Pipeline → Processed Data → Str
 ### Data Engineering & Operational Layer
 
 ![Data Engineering Layer](assets/screenshots/data_engineering_layer.png)
+---
+## Live Dashboard Demo
+
+![Dashboard Demo](assets/gifs/dashboard_demo.gif)
+
 
 ---
 
