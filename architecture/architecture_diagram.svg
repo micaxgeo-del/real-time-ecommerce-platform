@@ -1,0 +1,74 @@
+<svg width="1600" height="900" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#0b1020"/>
+  <text x="800" y="70" text-anchor="middle" fill="#ffffff" font-size="38" font-family="Arial" font-weight="bold">Real-Time Ecommerce Analytics Platform</text>
+  <text x="800" y="110" text-anchor="middle" fill="#b8c7d9" font-size="19" font-family="Arial">Cloud-inspired architecture for streaming, ETL, analytics and business dashboards</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#8bb9ff" />
+    </marker>
+    <style>
+      .box { fill:#172033; stroke:#8fa8c8; stroke-width:2; rx:18; }
+      .title { fill:#ffffff; font-size:22px; font-family:Arial; font-weight:bold; }
+      .sub { fill:#c9d6e3; font-size:15px; font-family:Arial; }
+      .arrow { stroke:#8bb9ff; stroke-width:4; marker-end:url(#arrow); }
+    </style>
+  </defs>
+
+  <rect class="box" x="70" y="270" width="230" height="105" rx="18"/>
+  <text class="title" x="185" y="315" text-anchor="middle">Ecommerce Events</text>
+  <text class="sub" x="185" y="345" text-anchor="middle">clicks · carts · orders</text>
+
+  <rect class="box" x="390" y="270" width="230" height="105" rx="18"/>
+  <text class="title" x="505" y="315" text-anchor="middle">Pub/Sub</text>
+  <text class="sub" x="505" y="345" text-anchor="middle">streaming ingestion</text>
+
+  <rect class="box" x="710" y="270" width="230" height="105" rx="18"/>
+  <text class="title" x="825" y="315" text-anchor="middle">Dataflow</text>
+  <text class="sub" x="825" y="345" text-anchor="middle">ETL · windows · transforms</text>
+
+  <rect class="box" x="1030" y="180" width="230" height="105" rx="18"/>
+  <text class="title" x="1145" y="225" text-anchor="middle">BigQuery</text>
+  <text class="sub" x="1145" y="255" text-anchor="middle">analytics warehouse</text>
+
+  <rect class="box" x="1030" y="380" width="230" height="105" rx="18"/>
+  <text class="title" x="1145" y="425" text-anchor="middle">Bigtable</text>
+  <text class="sub" x="1145" y="455" text-anchor="middle">low-latency metrics</text>
+
+  <rect class="box" x="1340" y="180" width="200" height="105" rx="18"/>
+  <text class="title" x="1440" y="225" text-anchor="middle">Dashboard</text>
+  <text class="sub" x="1440" y="255" text-anchor="middle">BI / Streamlit</text>
+
+  <rect class="box" x="1340" y="380" width="200" height="105" rx="18"/>
+  <text class="title" x="1440" y="425" text-anchor="middle">Ops Layer</text>
+  <text class="sub" x="1440" y="455" text-anchor="middle">real-time lookups</text>
+
+  <rect class="box" x="390" y="610" width="230" height="105" rx="18"/>
+  <text class="title" x="505" y="655" text-anchor="middle">Raw Layer</text>
+  <text class="sub" x="505" y="685" text-anchor="middle">event storage</text>
+
+  <rect class="box" x="710" y="610" width="230" height="105" rx="18"/>
+  <text class="title" x="825" y="655" text-anchor="middle">Processed Layer</text>
+  <text class="sub" x="825" y="685" text-anchor="middle">clean datasets</text>
+
+  <rect class="box" x="1030" y="610" width="230" height="105" rx="18"/>
+  <text class="title" x="1145" y="655" text-anchor="middle">SQL Models</text>
+  <text class="sub" x="1145" y="685" text-anchor="middle">KPIs · funnels · segments</text>
+
+  <rect class="box" x="1340" y="610" width="200" height="105" rx="18"/>
+  <text class="title" x="1440" y="655" text-anchor="middle">Insights</text>
+  <text class="sub" x="1440" y="685" text-anchor="middle">business decisions</text>
+
+  <line class="arrow" x1="300" y1="322" x2="390" y2="322"/>
+  <line class="arrow" x1="620" y1="322" x2="710" y2="322"/>
+  <line class="arrow" x1="940" y1="322" x2="1030" y2="235"/>
+  <line class="arrow" x1="940" y1="322" x2="1030" y2="430"/>
+  <line class="arrow" x1="1260" y1="232" x2="1340" y2="232"/>
+  <line class="arrow" x1="1260" y1="432" x2="1340" y2="432"/>
+  <line class="arrow" x1="505" y1="375" x2="505" y2="610"/>
+  <line class="arrow" x1="620" y1="662" x2="710" y2="662"/>
+  <line class="arrow" x1="940" y1="662" x2="1030" y2="662"/>
+  <line class="arrow" x1="1260" y1="662" x2="1340" y2="662"/>
+
+  <text x="70" y="835" fill="#9fb3c8" font-size="17" font-family="Arial">Portfolio project by Micaela Feriale · Data Analytics &amp; Data Engineering</text>
+</svg>

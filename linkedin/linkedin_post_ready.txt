@@ -1,0 +1,21 @@
+🚀 New Portfolio Project: Real-Time Ecommerce Analytics Platform
+
+I recently developed a cloud-inspired ecommerce analytics platform focused on Data Engineering and Data Analytics.
+
+The project simulates a modern ecommerce environment capable of processing user activity events, transforming raw data into analytics-ready datasets and exposing business KPIs through an interactive executive dashboard.
+
+🔹 Main features:
+• ETL/ELT pipeline design
+• Interactive Streamlit dashboard
+• Revenue and conversion analytics
+• Customer segmentation
+• Funnel analysis
+• Cloud-inspired architecture using concepts from Pub/Sub, Dataflow, BigQuery and Bigtable
+• KPI modeling and dashboard-ready datasets
+
+🛠️ Tech Stack:
+Python · SQL · Pandas · Streamlit · Plotly · ETL · Data Modeling · BigQuery Concepts · Data Engineering
+
+This project was designed as a professional portfolio case study to continue growing in Data Analytics and Data Engineering.
+
+#DataAnalytics #DataEngineering #Python #SQL #BigQuery #ETL #Streamlit #Analytics #GoogleCloud
