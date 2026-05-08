@@ -193,13 +193,8 @@ streamlit run dashboards/streamlit/app.py
 
 ## Live Demo
 
-Deploy the dashboard using Streamlit Cloud or Render to create a public interactive demo.
 
-Main dashboard file:
-
-```text
-dashboards/streamlit/app.py
-```
+[Open Interactive Dashboard](https://real-time-ecommerce-platform-vcbe6p7ampc8p24lj2fkln.streamlit.app/)
 
 ---
 
