@@ -1,85 +1,17 @@
-# Real-Time Ecommerce Analytics Platform
+# Real-Time E-commerce BI Dashboard Upgrade
 
-![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)
-![SQL](https://img.shields.io/badge/SQL-Analytics-orange)
-![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-red?logo=streamlit)
-![GCP](https://img.shields.io/badge/GCP-Cloud-blue?logo=googlecloud)
-![ETL](https://img.shields.io/badge/ETL-Pipeline-success)
-![Data Engineering](https://img.shields.io/badge/Data-Engineering-0ea5e9)
+A professional Business Intelligence dashboard project for e-commerce analytics, designed for portfolio presentation, recruiter review and technical interviews.
 
-![Architecture](architecture/architecture_diagram.svg)
-
----
-
-## Overview
-
-A cloud-inspired ecommerce analytics platform designed to simulate modern data engineering and analytics workflows.
-
-The project processes simulated ecommerce events, transforms raw operational data into analytics-ready datasets and exposes business KPIs through interactive dashboards.
-
-It was built to demonstrate practical capabilities across:
-
-- Data Engineering
-- Analytics Engineering
-- ETL/ELT Pipeline Design
-- Data Modeling
-- Streaming & Event-Driven Concepts
-- Cloud Analytics Architecture
-- Business Intelligence & KPI Development
-
----
-
-## Business Context
-
-Modern ecommerce platforms generate continuous streams of operational events including product views, searches, carts, checkouts and purchases.
-
-Without a scalable analytics platform, organizations can face:
-
-- Delayed reporting
-- Inconsistent KPIs
-- Limited visibility into customer behavior
-- Poor funnel analysis
-- Slow operational decision-making
-
-This project addresses those challenges by transforming raw event data into structured business insights and executive-level dashboards.
-
----
-
-## Architecture
-
-Cloud-inspired architecture:
-
-```text
-Ecommerce Events → Pub/Sub → Dataflow → BigQuery → Dashboard
-                                      → Bigtable
-```
-
-Local portfolio implementation:
-
-```text
-Simulated Events → Raw Data → Python ETL Pipeline → Processed Data → Streamlit Dashboard
-```
-
----
-
-## Technology Stack
-
-| Area | Tools |
-|---|---|
-| Programming | Python |
-| Data Processing | Pandas, NumPy |
-| Analytics | SQL, BigQuery-style queries |
-| Dashboard | Streamlit, Plotly |
-| Cloud Concepts | Pub/Sub, Dataflow, BigQuery, Bigtable |
-| Engineering Concepts | ETL/ELT, streaming, data modeling |
-
----
+This version adds a complete executive dashboard layer with interactive filters, realistic business KPIs, SQL logic and Looker Studio documentation.
 
 ## Dashboard Preview
 
-### Executive KPI Dashboard
+### Revenue Trend
+![Revenue Trend](assets/revenue_trend_preview.png)
 
-![KPI Dashboard](assets/screenshots/kpis_dashboard.png)
+### Channel Performance
+![Channel Performance](assets/channel_performance_preview.png)
+
 
 ---
 
@@ -116,25 +48,50 @@ Simulated Events → Raw Data → Python ETL Pipeline → Processed Data → Str
 
 ## Core KPIs
 
+## Business Context
+
+Modern e-commerce teams need fast visibility into revenue, orders, conversion, marketing spend, customer acquisition cost and profitability.
+
+This dashboard simulates a professional analytics environment where commercial, marketing and BI teams can monitor performance and identify business opportunities.
+
+## Main KPIs
+
+
 - Revenue
 - Orders
+- Sessions
 - Conversion Rate
 - Average Order Value
-- Active Users
-- Sessions
-- Events
-- Cart Abandonment Rate
+- Customer Acquisition Cost
+- ROAS
+- Gross Margin
+- Profit
+- Revenue by Channel
+- Revenue by Category
+- Revenue by Region
+- Conversion by Device
 
----
+## Interactive Dashboard Features
 
-## Repository Structure
+- Date range filter
+- Channel filter
+- Region filter
+- Category filter
+- Device filter
+- Executive KPI cards
+- Revenue trend
+- Orders trend
+- Conversion analysis
+- CAC and ROAS analysis
+- Channel performance table
+- Category treemap
+- Regional performance
+- Downloadable filtered dataset
+
+## Project Structure
 
 ```text
-real-time-ecommerce-platform/
-│
-├── architecture/
-│   ├── architecture.md
-│   └── architecture_diagram.svg
+real_time_ecommerce_dashboard_upgrade/
 │
 ├── dashboards/
 │   └── streamlit/
@@ -142,25 +99,25 @@ real-time-ecommerce-platform/
 │
 ├── data/
 │   ├── raw/
+│   │   └── ecommerce_orders_2025.csv
 │   └── processed/
+│       └── ecommerce_dashboard_dataset.csv
+│
+├── sql/
+│   └── bigquery_dashboard_kpis.sql
 │
 ├── docs/
-│   ├── dashboard_documentation.md
-│   └── linkedin_project_description.md
+│   └── looker_studio_dashboard_spec.md
 │
-├── src/
-│   ├── producer/
-│   └── pipelines/
-│
-├── deployment/
 ├── assets/
+│   ├── revenue_trend_preview.png
+│   └── channel_performance_preview.png
+│
 ├── requirements.txt
 └── README.md
 ```
 
----
-
-## Local Execution
+## How to Run Locally
 
 Install dependencies:
 
@@ -168,43 +125,38 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-Run ETL pipeline:
-
-```bash
-python src/pipelines/etl_pipeline.py
-```
-
-Run dashboard:
+Run the dashboard:
 
 ```bash
 streamlit run dashboards/streamlit/app.py
 ```
 
----
+## Looker Studio Version
 
-## Engineering Concepts Demonstrated
+A Looker Studio specification is included in:
 
-- Event-driven architecture
-- Streaming ingestion concepts
-- ETL/ELT pipelines
-- Data transformation workflows
-- Analytics-ready modeling
-- KPI layer design
-- Dashboard-ready datasets
-- Operational analytics concepts
-- BigQuery-inspired analytical workflows
+```text
+docs/looker_studio_dashboard_spec.md
+```
 
----
+It explains the filters, scorecards and charts needed to replicate the same BI dashboard in Looker Studio.
 
-## Live Demo
+## SQL / BigQuery
 
+The file below contains a BigQuery-style KPI query:
 
-[Open Interactive Dashboard](https://real-time-ecommerce-platform-vcbe6p7ampc8p24lj2fkln.streamlit.app/)
+```text
+sql/bigquery_dashboard_kpis.sql
+```
 
----
+## Interview Positioning
+
+This project can be presented as:
+
+> A professional e-commerce BI dashboard built to monitor revenue, conversion, marketing efficiency and commercial performance through interactive filters, SQL logic and executive KPIs.
 
 ## Author
 
-**Micaela Feriale**
-
-Data Analytics | Data Engineering | SQL | Python | BigQuery | ETL | BI
+Micaela Feriale  
+Data Analytics | BI | SQL | Python | BigQuery  
+LinkedIn: https://www.linkedin.com/in/micaelaferiale/

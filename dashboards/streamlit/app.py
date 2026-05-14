@@ -1,165 +1,206 @@
-"""
-Executive Ecommerce Analytics Dashboard
 
-Run:
-    streamlit run dashboards/streamlit/app.py
-"""
-
-from pathlib import Path
-import pandas as pd
 import streamlit as st
+import pandas as pd
 import plotly.express as px
+import numpy as np
 
-BASE_DIR = Path(__file__).resolve().parents[2]
-DATA_DIR = BASE_DIR / "data/processed"
-
-st.set_page_config(page_title="Real-Time Ecommerce Analytics Platform", page_icon="📊", layout="wide")
-
-st.markdown("""
-<style>
-.stApp { background: linear-gradient(180deg, #0b1020 0%, #111827 55%, #0f172a 100%); color: #e5e7eb; }
-[data-testid="stSidebar"] { background-color: #111827; }
-h1, h2, h3 { color: #f8fafc; }
-.block-container { padding-top: 2rem; }
-[data-testid="stMetric"] { background-color: #172033; border: 1px solid #263244; padding: 18px; border-radius: 16px; }
-[data-testid="stMetricLabel"] { color: #cbd5e1; }
-[data-testid="stMetricValue"] { color: #f8fafc; }
-</style>
-""", unsafe_allow_html=True)
+st.set_page_config(
+    page_title="Executive E-commerce BI Dashboard",
+    page_icon="📊",
+    layout="wide"
+)
 
 @st.cache_data
 def load_data():
-    events = pd.read_csv(DATA_DIR / "analytics_events.csv")
-    events["event_timestamp"] = pd.to_datetime(events["event_timestamp"])
-    events["event_date"] = pd.to_datetime(events["event_date"])
-    events["order_id"] = events["order_id"].fillna("")
-    return events
+    df = pd.read_csv("data/processed/ecommerce_dashboard_dataset.csv")
+    df["date"] = pd.to_datetime(df["date"])
+    return df
 
-events = load_data()
+df = load_data()
 
-st.markdown("# Real-Time Ecommerce Analytics Platform")
-st.markdown("#### Executive analytics dashboard for revenue, customer behavior, conversion and operational data monitoring.")
+st.title("📊 Executive E-commerce BI Dashboard")
+st.caption("Interactive business intelligence dashboard for revenue, marketing performance, conversion and profitability analysis.")
 
-st.sidebar.title("Dashboard Filters")
+# Sidebar filters
+st.sidebar.header("Dashboard Filters")
 
-min_date = events["event_date"].min().date()
-max_date = events["event_date"].max().date()
+date_min = df["date"].min().date()
+date_max = df["date"].max().date()
+date_range = st.sidebar.date_input(
+    "Date range",
+    value=(date_min, date_max),
+    min_value=date_min,
+    max_value=date_max
+)
 
-date_range = st.sidebar.date_input("Date range", value=(min_date, max_date), min_value=min_date, max_value=max_date)
-countries = st.sidebar.multiselect("Country", sorted(events["country"].dropna().unique()), default=sorted(events["country"].dropna().unique()))
-devices = st.sidebar.multiselect("Device", sorted(events["device_type"].dropna().unique()), default=sorted(events["device_type"].dropna().unique()))
-categories = st.sidebar.multiselect("Category", sorted(events["category"].dropna().unique()), default=sorted(events["category"].dropna().unique()))
-sources = st.sidebar.multiselect("Traffic Source", sorted(events["traffic_source"].dropna().unique()), default=sorted(events["traffic_source"].dropna().unique()))
+channels = st.sidebar.multiselect(
+    "Channel",
+    sorted(df["channel"].unique()),
+    default=sorted(df["channel"].unique())
+)
 
-if isinstance(date_range, tuple) and len(date_range) == 2:
-    start_date, end_date = date_range
-else:
-    start_date, end_date = min_date, max_date
+regions = st.sidebar.multiselect(
+    "Region",
+    sorted(df["region"].unique()),
+    default=sorted(df["region"].unique())
+)
 
-filtered = events[
-    (events["event_date"].dt.date >= start_date) &
-    (events["event_date"].dt.date <= end_date) &
-    (events["country"].isin(countries)) &
-    (events["device_type"].isin(devices)) &
-    (events["category"].isin(categories)) &
-    (events["traffic_source"].isin(sources))
-].copy()
+categories = st.sidebar.multiselect(
+    "Category",
+    sorted(df["category"].unique()),
+    default=sorted(df["category"].unique())
+)
 
-total_revenue = filtered["revenue"].sum()
-orders = filtered.loc[filtered["event_type"] == "purchase", "order_id"].replace("", pd.NA).dropna().nunique()
-active_users = filtered["user_id"].nunique()
-sessions = filtered["session_id"].nunique()
-events_count = filtered["event_id"].nunique()
-aov = total_revenue / orders if orders else 0
-conversion_rate = orders / active_users if active_users else 0
-cart_users = filtered.loc[filtered["event_type"] == "add_to_cart", "user_id"].nunique()
-purchase_users = filtered.loc[filtered["event_type"] == "purchase", "user_id"].nunique()
-cart_abandonment = 1 - (purchase_users / cart_users) if cart_users else 0
+devices = st.sidebar.multiselect(
+    "Device",
+    sorted(df["device"].unique()),
+    default=sorted(df["device"].unique())
+)
 
-st.markdown("## Executive Overview")
-c1, c2, c3, c4 = st.columns(4)
-c1.metric("Revenue", f"${total_revenue:,.0f}")
-c2.metric("Orders", f"{orders:,}")
-c3.metric("Conversion Rate", f"{conversion_rate:.2%}")
-c4.metric("Average Order Value", f"${aov:,.2f}")
+filtered = df.copy()
 
-c5, c6, c7, c8 = st.columns(4)
-c5.metric("Active Users", f"{active_users:,}")
-c6.metric("Sessions", f"{sessions:,}")
-c7.metric("Events", f"{events_count:,}")
-c8.metric("Cart Abandonment", f"{cart_abandonment:.2%}")
+if len(date_range) == 2:
+    start_date, end_date = pd.to_datetime(date_range[0]), pd.to_datetime(date_range[1])
+    filtered = filtered[(filtered["date"] >= start_date) & (filtered["date"] <= end_date)]
 
-st.markdown("---")
+filtered = filtered[
+    filtered["channel"].isin(channels)
+    & filtered["region"].isin(regions)
+    & filtered["category"].isin(categories)
+    & filtered["device"].isin(devices)
+]
 
-daily = filtered.groupby("event_date").agg(
-    revenue=("revenue", "sum"),
-    orders=("order_id", lambda x: (x.replace("", pd.NA).dropna()).nunique()),
-    active_users=("user_id", "nunique"),
-    sessions=("session_id", "nunique")
-).reset_index()
+if filtered.empty:
+    st.warning("No data available for the selected filters.")
+    st.stop()
 
-left, right = st.columns(2)
-with left:
-    st.subheader("Revenue Trend")
-    fig = px.line(daily, x="event_date", y="revenue", markers=True, template="plotly_dark")
-    fig.update_layout(paper_bgcolor="#111827", plot_bgcolor="#111827")
+# KPIs
+revenue = filtered["revenue_usd"].sum()
+orders = filtered["orders"].sum()
+sessions = filtered["sessions"].sum()
+spend = filtered["marketing_spend_usd"].sum()
+profit = filtered["profit_usd"].sum()
+
+conversion = orders / sessions if sessions else 0
+aov = revenue / orders if orders else 0
+cac = spend / orders if orders else 0
+roas = revenue / spend if spend else np.nan
+margin = profit / revenue if revenue else 0
+
+kpi1, kpi2, kpi3, kpi4, kpi5, kpi6 = st.columns(6)
+kpi1.metric("Revenue", f"${revenue:,.0f}")
+kpi2.metric("Orders", f"{orders:,.0f}")
+kpi3.metric("Conversion", f"{conversion:.2%}")
+kpi4.metric("AOV", f"${aov:,.2f}")
+kpi5.metric("CAC", f"${cac:,.2f}")
+kpi6.metric("ROAS", "N/A" if np.isnan(roas) else f"{roas:.2f}x")
+
+st.divider()
+
+# Tabs
+tab1, tab2, tab3, tab4 = st.tabs([
+    "Executive Overview",
+    "Marketing Performance",
+    "Commercial Segments",
+    "Data Table"
+])
+
+with tab1:
+    monthly = filtered.groupby("month", as_index=False).agg(
+        revenue_usd=("revenue_usd","sum"),
+        orders=("orders","sum"),
+        sessions=("sessions","sum"),
+        marketing_spend_usd=("marketing_spend_usd","sum"),
+        profit_usd=("profit_usd","sum")
+    )
+    monthly["conversion_rate"] = monthly["orders"] / monthly["sessions"]
+    monthly["cac_usd"] = monthly["marketing_spend_usd"] / monthly["orders"]
+    monthly["roas"] = monthly["revenue_usd"] / monthly["marketing_spend_usd"].replace(0, np.nan)
+
+    c1, c2 = st.columns(2)
+    with c1:
+        fig = px.line(monthly, x="month", y="revenue_usd", markers=True, title="Revenue Trend")
+        st.plotly_chart(fig, use_container_width=True)
+    with c2:
+        fig = px.bar(monthly, x="month", y="orders", title="Monthly Orders")
+        st.plotly_chart(fig, use_container_width=True)
+
+    c3, c4 = st.columns(2)
+    with c3:
+        fig = px.line(monthly, x="month", y="conversion_rate", markers=True, title="Conversion Rate")
+        fig.update_yaxes(tickformat=".2%")
+        st.plotly_chart(fig, use_container_width=True)
+    with c4:
+        fig = px.line(monthly, x="month", y="cac_usd", markers=True, title="Customer Acquisition Cost")
+        st.plotly_chart(fig, use_container_width=True)
+
+with tab2:
+    channel = filtered.groupby("channel", as_index=False).agg(
+        revenue_usd=("revenue_usd","sum"),
+        orders=("orders","sum"),
+        sessions=("sessions","sum"),
+        marketing_spend_usd=("marketing_spend_usd","sum"),
+        profit_usd=("profit_usd","sum")
+    )
+    channel["conversion_rate"] = channel["orders"] / channel["sessions"]
+    channel["cac_usd"] = channel["marketing_spend_usd"] / channel["orders"]
+    channel["roas"] = channel["revenue_usd"] / channel["marketing_spend_usd"].replace(0, np.nan)
+
+    c1, c2 = st.columns(2)
+    with c1:
+        fig = px.bar(channel.sort_values("revenue_usd", ascending=False), x="channel", y="revenue_usd", title="Revenue by Channel")
+        st.plotly_chart(fig, use_container_width=True)
+    with c2:
+        fig = px.scatter(channel, x="cac_usd", y="roas", size="revenue_usd", hover_name="channel", title="CAC vs ROAS by Channel")
+        st.plotly_chart(fig, use_container_width=True)
+
+    st.subheader("Channel KPI Table")
+    st.dataframe(
+        channel.sort_values("revenue_usd", ascending=False),
+        use_container_width=True
+    )
+
+with tab3:
+    c1, c2 = st.columns(2)
+
+    category = filtered.groupby("category", as_index=False).agg(
+        revenue_usd=("revenue_usd","sum"),
+        orders=("orders","sum"),
+        profit_usd=("profit_usd","sum")
+    )
+    category["gross_margin_pct"] = category["profit_usd"] / category["revenue_usd"]
+
+    region = filtered.groupby("region", as_index=False).agg(
+        revenue_usd=("revenue_usd","sum"),
+        orders=("orders","sum")
+    )
+
+    with c1:
+        fig = px.treemap(category, path=["category"], values="revenue_usd", color="gross_margin_pct", title="Revenue & Margin by Category")
+        st.plotly_chart(fig, use_container_width=True)
+    with c2:
+        fig = px.bar(region.sort_values("revenue_usd", ascending=False), x="region", y="revenue_usd", title="Revenue by Region")
+        st.plotly_chart(fig, use_container_width=True)
+
+    device = filtered.groupby("device", as_index=False).agg(
+        revenue_usd=("revenue_usd","sum"),
+        orders=("orders","sum"),
+        sessions=("sessions","sum")
+    )
+    device["conversion_rate"] = device["orders"] / device["sessions"]
+
+    fig = px.bar(device, x="device", y="conversion_rate", title="Conversion Rate by Device")
+    fig.update_yaxes(tickformat=".2%")
     st.plotly_chart(fig, use_container_width=True)
 
-with right:
-    st.subheader("Active Users Trend")
-    fig = px.area(daily, x="event_date", y="active_users", template="plotly_dark")
-    fig.update_layout(paper_bgcolor="#111827", plot_bgcolor="#111827")
-    st.plotly_chart(fig, use_container_width=True)
+with tab4:
+    st.subheader("Filtered Dataset")
+    st.dataframe(filtered, use_container_width=True)
 
-left, right = st.columns(2)
-with left:
-    st.subheader("Revenue by Category")
-    cat = filtered.groupby("category").agg(revenue=("revenue", "sum")).reset_index().sort_values("revenue", ascending=False)
-    fig = px.bar(cat, x="category", y="revenue", text_auto=".2s", template="plotly_dark")
-    fig.update_layout(paper_bgcolor="#111827", plot_bgcolor="#111827")
-    st.plotly_chart(fig, use_container_width=True)
-
-with right:
-    st.subheader("Traffic Source Performance")
-    src = filtered.groupby("traffic_source").agg(revenue=("revenue", "sum"), users=("user_id", "nunique")).reset_index()
-    fig = px.treemap(src, path=["traffic_source"], values="revenue", color="users", template="plotly_dark")
-    fig.update_layout(paper_bgcolor="#111827")
-    st.plotly_chart(fig, use_container_width=True)
-
-st.subheader("Conversion Funnel")
-funnel = filtered.groupby("event_type").agg(users=("user_id", "nunique")).reset_index()
-order = {"page_view": 1, "search": 2, "add_to_cart": 3, "checkout": 4, "purchase": 5}
-funnel["step"] = funnel["event_type"].map(order)
-funnel = funnel.sort_values("step")
-fig = px.funnel(funnel, x="users", y="event_type", template="plotly_dark")
-fig.update_layout(paper_bgcolor="#111827", plot_bgcolor="#111827")
-st.plotly_chart(fig, use_container_width=True)
-
-left, right = st.columns(2)
-with left:
-    st.subheader("Device Revenue Distribution")
-    dev = filtered.groupby("device_type").agg(revenue=("revenue", "sum")).reset_index()
-    fig = px.pie(dev, names="device_type", values="revenue", hole=0.45, template="plotly_dark")
-    fig.update_layout(paper_bgcolor="#111827")
-    st.plotly_chart(fig, use_container_width=True)
-
-with right:
-    st.subheader("Customer Segmentation")
-    cust = filtered.groupby("user_id").agg(revenue=("revenue", "sum")).reset_index()
-    cust["segment"] = pd.cut(cust["revenue"], bins=[-1, 0, 50, 200, 100000], labels=["No purchase", "Low value", "Medium value", "High value"])
-    seg = cust.groupby("segment", observed=True).agg(customers=("user_id", "count")).reset_index()
-    fig = px.bar(seg, x="segment", y="customers", text_auto=True, template="plotly_dark")
-    fig.update_layout(paper_bgcolor="#111827", plot_bgcolor="#111827")
-    st.plotly_chart(fig, use_container_width=True)
-
-st.markdown("---")
-st.markdown("## Data Engineering Layer")
-x1, x2, x3 = st.columns(3)
-x1.info("Raw ecommerce events are transformed into analytics-ready datasets.")
-x2.info("Architecture inspired by Pub/Sub → Dataflow → BigQuery.")
-x3.info("Bigtable represents a low-latency operational analytics layer.")
-
-with st.expander("Preview processed events"):
-    st.dataframe(filtered.head(100), use_container_width=True)
-
-st.caption("Portfolio project by Micaela Feriale · Data Analytics & Data Engineering")
+    csv = filtered.to_csv(index=False).encode("utf-8")
+    st.download_button(
+        "Download filtered data as CSV",
+        csv,
+        "filtered_ecommerce_dashboard_data.csv",
+        "text/csv"
+    )
